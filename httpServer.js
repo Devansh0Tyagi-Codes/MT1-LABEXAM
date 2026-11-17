@@ -151,6 +151,19 @@ const server = http.createServer((req, res) => {
 });
 
 // A1: Start server on port 3000
-server.listen(3000, () => {
-  console.log("HTTP Server running at http://localhost:3000");
+const PORT = process.env.PORT || 3000;
+
+server.on("error", (err) => {
+  if (err.code === "EADDRINUSE") {
+    console.log(`Port ${PORT} is busy, starting on http://localhost:3001 instead...`);
+    server.listen(3001, () => {
+      console.log("HTTP Server running at http://localhost:3001");
+    });
+  } else {
+    console.error("HTTP Server error:", err);
+  }
+});
+
+server.listen(PORT, () => {
+  console.log(`HTTP Server running at http://localhost:${PORT}`);
 });

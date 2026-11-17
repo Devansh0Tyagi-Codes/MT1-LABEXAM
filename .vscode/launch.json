@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Part A: Run HTTP Server (Port 3000)",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/httpServer.js",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Part B: Run Express Server (Port 4000)",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/expressApp.js",
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Run Automated Tests",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/testApp.js",
+      "console": "integratedTerminal"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Run Both Servers (HTTP + Express)",
+      "configurations": [
+        "Part A: Run HTTP Server (Port 3000)",
+        "Part B: Run Express Server (Port 4000)"
+      ],
+      "stopAll": true
+    }
+  ]
+}
