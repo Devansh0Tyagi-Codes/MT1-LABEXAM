@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employee Task Management System</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --success: #16a34a;
+      --warning: #ca8a04;
+      --danger: #dc2626;
+      --bg-main: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding-bottom: 60px;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: white;
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      background: #eff6ff;
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 9999px;
+      font-weight: 600;
+      border: 1px solid #bfdbfe;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-muted);
+      font-weight: 500;
+      font-size: 14px;
+      transition: color 0.15s ease;
+    }
+
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--primary);
+    }
+
+    /* Main Container */
+    main {
+      max-width: 1100px;
+      margin: 36px auto;
+      padding: 0 24px;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 36px;
+      box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2);
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 17px;
+      opacity: 0.95;
+      max-width: 650px;
+      margin-bottom: 24px;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .hero-tag {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    /* Features Grid */
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 22px;
+    }
+
+    .icon-blue { background: #dbeafe; color: #1e40af; }
+    .icon-green { background: #dcfce7; color: #15803d; }
+    .icon-amber { background: #fef3c7; color: #b45309; }
+
+    .card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    /* Tasks Preview Table */
+    .tasks-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 36px;
+    }
+
+    .tasks-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f8fafc;
+      padding: 12px 16px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border);
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-main);
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-pending {
+      background-color: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-completed {
+      background-color: #dcfce7;
+      color: #166534;
+    }
+
+    .badge-high {
+      background-color: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-medium {
+      background-color: #ffedd5;
+      color: #9a3412;
+    }
+
+    .badge-low {
+      background-color: #f1f5f9;
+      color: #475569;
+    }
+
+    /* Quick Links Box */
+    .endpoints-box {
+      background: #f1f5f9;
+      border-left: 4px solid var(--primary);
+      padding: 20px;
+      border-radius: 0 8px 8px 0;
+      margin-top: 24px;
+    }
+
+    .endpoints-box h4 {
+      margin-bottom: 10px;
+      font-size: 15px;
+      color: #1e293b;
+    }
+
+    .endpoints-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      list-style: none;
+    }
+
+    .endpoint-pill {
+      background: white;
+      border: 1px solid #cbd5e1;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      color: #334155;
+      text-decoration: none;
+    }
+
+    .endpoint-pill:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 40px;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header>
+    <div class="nav-container">
+      <a href="/" class="brand">
+        <span>TaskMaster</span>
+        <span class="brand-badge">Node.js + Express</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="/" target="_blank">Root (/)</a></li>
+        <li><a href="/home" class="active">Home (/home)</a></li>
+        <li><a href="/about" target="_blank">About (/about)</a></li>
+        <li><a href="/tasks" target="_blank">JSON Tasks (/tasks)</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Hero Banner -->
+    <section class="hero">
+      <h1>Employee Task Management System</h1>
+      <p>A full-stack Node.js and Express.js web application built for the MT1 Lab Examination demonstrating modular architecture, HTTP/FS static serving, and RESTful APIs.</p>
+      <div class="hero-tags">
+        <span class="hero-tag">Node.js HTTP Module</span>
+        <span class="hero-tag">FS Module Static Serving</span>
+        <span class="hero-tag">Express.js REST API</span>
+        <span class="hero-tag">In-Memory Array Storage</span>
+      </div>
+    </section>
+
+    <!-- Key Features -->
+    <h2 class="section-title">Core Features & Architecture</h2>
+    <section class="grid-3">
+      <div class="card">
+        <div class="card-icon icon-blue">&#9881;</div>
+        <h3>HTTP & Routing (Part A)</h3>
+        <p>Built-in Node.js <code>http</code> module server on port 3000 handling welcome routing, JSON data retrieval, error handling, and task additions.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon icon-green">&#128196;</div>
+        <h3>Static File Serving (FS)</h3>
+        <p>Built-in Node.js <code>fs</code> module reading and streaming static files (<code>index.html</code>) directly when navigating to <code>/home</code>.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon icon-amber">&#128640;</div>
+        <h3>Express.js REST API (Part B)</h3>
+        <p>Dedicated Express server on port 4000 providing full CRUD operations: GET all tasks, GET by ID, POST new task, PUT update, and DELETE.</p>
+      </div>
+    </section>
+
+    <!-- Sample Tasks Table Preview -->
+    <section class="tasks-card">
+      <div class="tasks-header">
+        <div>
+          <h2 class="section-title" style="margin-bottom: 4px;">Employee Tasks Preview</h2>
+          <p style="color: var(--text-muted); font-size: 13px;">Pre-initialized employee tasks demonstrating structured data records</p>
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Task Name</th>
+              <th>Assigned To</th>
+              <th>Status</th>
+              <th>Priority</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>#1</strong></td>
+              <td>Develop Login Page</td>
+              <td>Rahul Sharma</td>
+              <td><span class="badge badge-pending">Pending</span></td>
+              <td><span class="badge badge-high">High</span></td>
+            </tr>
+            <tr>
+              <td><strong>#2</strong></td>
+              <td>Create Dashboard</td>
+              <td>Amit Kumar</td>
+              <td><span class="badge badge-completed">Completed</span></td>
+              <td><span class="badge badge-medium">Medium</span></td>
+            </tr>
+            <tr>
+              <td><strong>#3</strong></td>
+              <td>Test Website</td>
+              <td>Priya Sharma</td>
+              <td><span class="badge badge-pending">Pending</span></td>
+              <td><span class="badge badge-low">Low</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="endpoints-box">
+        <h4>Direct HTTP Module Endpoints (Port 3000):</h4>
+        <div class="endpoints-list">
+          <a class="endpoint-pill" href="http://localhost:3000/" target="_blank">GET / (Welcome)</a>
+          <a class="endpoint-pill" href="http://localhost:3000/home" target="_blank">GET /home (Static FS Page)</a>
+          <a class="endpoint-pill" href="http://localhost:3000/tasks" target="_blank">GET /tasks (JSON)</a>
+          <a class="endpoint-pill" href="http://localhost:3000/about" target="_blank">GET /about (Info)</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>MT1 Lab Examination &bull; Employee Task Management Web Application &bull; Node.js &amp; Express.js</p>
+  </footer>
+
+</body>
+</html>
